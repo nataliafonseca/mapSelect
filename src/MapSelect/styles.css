@@ -1,0 +1,20 @@
+g {
+  cursor: pointer; 
+  transform: all 0.1s;
+}
+
+g:hover {
+  filter: brightness(90%);
+}
+
+text {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+text:hover {
+  filter: brightness(unset);
+}

@@ -1,15 +1,24 @@
+import "./styles.css";
+
 import { useState } from "react";
 
-import * as Styled from "./styles";
-import { IMapSelect, IState } from "./types";
+import mapInfo from "./brMap.json";
 
-export function MapSelect(props: IMapSelect) {
-  const initialMap = props.mapInfo.map((state) => ({
-    ...state,
-    selected: false,
-  })) as Array<IState>;
+export interface IState {
+  key: string;
+  title: string;
+  path: string;
+  path_aux?: string;
+  transform: string;
+  selected: boolean;
+}
 
-  const [map, setMap] = useState(initialMap);
+export interface IMapSelect {
+  onChange: (value: IState[]) => void;
+}
+
+export function MapSelect({ onChange }: IMapSelect) {
+  const [map, setMap] = useState(mapInfo);
 
   async function handleClick(key: string) {
     const updatedList = map.map((state) => {
@@ -20,29 +29,26 @@ export function MapSelect(props: IMapSelect) {
       }
     });
 
-    props.onChange(updatedList.filter((state) => state.selected));
+    onChange(updatedList.filter((state) => state.selected));
     setMap(updatedList);
   }
 
   return (
-    <Styled.Map
-      viewBox="0 0 449 461"
-      maxHeight={props.height}
-      maxWidth={props.width}
-    >
+    <svg height="100%" width="100%" viewBox="0 0 449 461">
       {map.map((state) => (
-        <Styled.State
-          style={props.style}
-          selected={state.selected}
+        <g
+          fill={state.selected ? "#e77d8f" : "#8d8d8d"}
+          stroke="#6c6c6c"
           key={state.key}
           onClick={() => handleClick(state.key)}
-          hint={state.title}
         >
           <path d={state.path} />
           {state.path_aux && <path d={state.path_aux} />}
-          <text transform={state.transform}>{state.key}</text>
-        </Styled.State>
+          <text stroke="initial" fill="#ffffff" transform={state.transform}>
+            {state.key}
+          </text>
+        </g>
       ))}
-    </Styled.Map>
+    </svg>
   );
 }
